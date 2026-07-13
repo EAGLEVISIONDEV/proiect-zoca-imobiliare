@@ -23,6 +23,11 @@
 # misc
 .DS_Store
 *.pem
+upscale.log
+/tools/
+
+# large local assets not needed for deploy
+/public/merged-scroll.mp4
 
 # debug
 npm-debug.log*
