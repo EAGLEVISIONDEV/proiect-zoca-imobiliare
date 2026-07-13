@@ -428,19 +428,23 @@ body {
 
 .zoca-loader__logo-frame {
   position: relative;
-  overflow: hidden;
-  width: min(17rem, 62vw);
+  width: min(20rem, 72vw);
+  padding: 0.5rem;
   animation: zoca-loader-breathe 4.8s ease-in-out infinite;
 }
 
 .zoca-loader__logo {
+  display: block;
   width: 100%;
 }
 
 .zoca-loader__logo .brand-logo-img {
-  width: 100%;
+  width: 100% !important;
   height: auto !important;
-  filter: drop-shadow(0 18px 48px rgba(0, 0, 0, 0.45));
+  max-height: none !important;
+  filter:
+    drop-shadow(0 0 28px rgba(201, 169, 110, 0.45))
+    drop-shadow(0 16px 40px rgba(0, 0, 0, 0.35));
 }
 
 .zoca-loader__shimmer {
@@ -448,15 +452,15 @@ body {
   inset: 0;
   background: linear-gradient(
     105deg,
-    transparent 38%,
-    rgba(255, 255, 255, 0.14) 48%,
-    rgba(232, 212, 176, 0.35) 50%,
-    rgba(255, 255, 255, 0.14) 52%,
-    transparent 62%
+    transparent 40%,
+    rgba(255, 255, 255, 0.06) 48%,
+    rgba(232, 212, 176, 0.18) 50%,
+    rgba(255, 255, 255, 0.06) 52%,
+    transparent 60%
   );
   transform: translateX(-120%);
   animation: zoca-loader-shimmer 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  mix-blend-mode: screen;
+  mix-blend-mode: soft-light;
   pointer-events: none;
 }
 

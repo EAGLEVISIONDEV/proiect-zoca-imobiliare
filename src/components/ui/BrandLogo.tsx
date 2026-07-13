@@ -6,6 +6,7 @@ const sizeHeights = {
   md: 56,
   lg: 72,
   xl: 220,
+  loader: 300,
 } as const;
 
 type BrandLogoProps = {
