@@ -6,7 +6,7 @@ const sizeHeights = {
   md: 56,
   lg: 72,
   xl: 220,
-  loader: 300,
+  loader: 320,
 } as const;
 
 type BrandLogoProps = {
@@ -27,8 +27,8 @@ export function BrandLogo({
       <Image
         src={siteConfig.logo}
         alt={siteConfig.name}
-        width={512}
-        height={512}
+        width={1024}
+        height={1024}
         priority={priority}
         unoptimized
         className="brand-logo-img"

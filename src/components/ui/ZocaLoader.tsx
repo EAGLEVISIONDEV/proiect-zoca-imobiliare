@@ -40,10 +40,7 @@ export function ZocaLoader({ progress, visible }: ZocaLoaderProps) {
       <div className="zoca-loader__content">
         <div className="zoca-loader__logo-wrap">
           <div className="zoca-loader__logo-glow" aria-hidden="true" />
-          <div className="zoca-loader__logo-frame">
-            <BrandLogo size="loader" priority className="zoca-loader__logo" />
-            <div className="zoca-loader__shimmer" aria-hidden="true" />
-          </div>
+          <BrandLogo size="loader" priority className="zoca-loader__logo" />
         </div>
 
         <p className="zoca-loader__mantra">

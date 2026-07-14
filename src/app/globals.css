@@ -132,6 +132,7 @@ body {
   display: block;
   width: auto;
   object-fit: contain;
+  mix-blend-mode: lighten;
 }
 
 /* ── 3D extruded letter text (CSS-Tricks layered + per-letter shadows) ── */
@@ -411,29 +412,26 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: min(22rem, 78vw);
 }
 
 .zoca-loader__logo-glow {
   position: absolute;
-  inset: -30%;
+  inset: -20%;
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(201, 169, 110, 0.28) 0%,
-    rgba(15, 35, 66, 0.2) 45%,
-    transparent 70%
+    rgba(201, 169, 110, 0.35) 0%,
+    rgba(15, 35, 66, 0.15) 50%,
+    transparent 72%
   );
   animation: zoca-loader-pulse 3.6s ease-in-out infinite;
-}
-
-.zoca-loader__logo-frame {
-  position: relative;
-  width: min(20rem, 72vw);
-  padding: 0.5rem;
-  animation: zoca-loader-breathe 4.8s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .zoca-loader__logo {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
 }
@@ -441,27 +439,7 @@ body {
 .zoca-loader__logo .brand-logo-img {
   width: 100% !important;
   height: auto !important;
-  max-height: none !important;
-  filter:
-    drop-shadow(0 0 28px rgba(201, 169, 110, 0.45))
-    drop-shadow(0 16px 40px rgba(0, 0, 0, 0.35));
-}
-
-.zoca-loader__shimmer {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.06) 48%,
-    rgba(232, 212, 176, 0.18) 50%,
-    rgba(255, 255, 255, 0.06) 52%,
-    transparent 60%
-  );
-  transform: translateX(-120%);
-  animation: zoca-loader-shimmer 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  mix-blend-mode: soft-light;
-  pointer-events: none;
+  filter: drop-shadow(0 0 32px rgba(201, 169, 110, 0.55));
 }
 
 .zoca-loader__mantra {

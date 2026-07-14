@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Zoca Real Estate",
-  logo: "/brand/zoca-logo-transparent.png",
+  logo: "/brand/zoca-logo.png",
   tagline: "Agenție Imobiliară Premium",
   phone: "+40 743 694 664",
   email: "stefan.meluta@zoca.ro",
