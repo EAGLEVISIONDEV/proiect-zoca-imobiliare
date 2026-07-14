@@ -306,27 +306,28 @@ body {
 
 /* ── Zoca luxury loader ── */
 .zoca-loader {
-  --loader-navy: #071224;
-  --loader-navy-mid: #0f2342;
-  --loader-navy-light: #1a3a6b;
+  --loader-navy: #050d1a;
   --loader-gold: #c9a96e;
   --loader-gold-light: #e8d4b0;
-  --loader-gold-dark: #8b7355;
 
   position: fixed;
   inset: 0;
   z-index: 50;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: var(--loader-navy);
+  background: radial-gradient(
+    ellipse 120% 80% at 50% 40%,
+    #0c1f3d 0%,
+    var(--loader-navy) 55%,
+    #030810 100%
+  );
   color: #f8fafc;
   opacity: 1;
   transition:
-    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0.9s;
+    opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.85s;
 }
 
 .zoca-loader--exit {
@@ -336,7 +337,7 @@ body {
 }
 
 .zoca-loader--exit .zoca-loader__content {
-  transform: scale(1.03);
+  transform: scale(1.04);
   opacity: 0;
 }
 
@@ -349,48 +350,28 @@ body {
 .zoca-loader__orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.45;
-  animation: zoca-loader-drift 14s ease-in-out infinite;
+  filter: blur(90px);
+  opacity: 0.5;
+  animation: zoca-loader-drift 16s ease-in-out infinite;
 }
 
 .zoca-loader__orb--a {
-  top: 18%;
-  left: 22%;
-  width: 42vw;
-  height: 42vw;
-  max-width: 28rem;
-  max-height: 28rem;
-  background: radial-gradient(circle, #1e4a8a 0%, transparent 70%);
+  top: 10%;
+  left: 50%;
+  width: min(52vw, 32rem);
+  height: min(52vw, 32rem);
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(201, 169, 110, 0.22) 0%, transparent 68%);
 }
 
 .zoca-loader__orb--b {
-  right: 18%;
-  bottom: 22%;
-  width: 36vw;
-  height: 36vw;
-  max-width: 22rem;
-  max-height: 22rem;
-  background: radial-gradient(circle, rgba(201, 169, 110, 0.35) 0%, transparent 70%);
-  animation-delay: -7s;
-}
-
-.zoca-loader__grid {
-  position: absolute;
-  inset: 0;
-  opacity: 0.18;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse at 50% 45%, black 20%, transparent 72%);
-}
-
-.zoca-loader__grain {
-  position: absolute;
-  inset: 0;
-  opacity: 0.22;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  right: -8%;
+  bottom: -6%;
+  width: min(44vw, 26rem);
+  height: min(44vw, 26rem);
+  background: radial-gradient(circle, rgba(30, 74, 138, 0.45) 0%, transparent 70%);
+  animation: zoca-loader-drift-b 16s ease-in-out infinite;
+  animation-delay: -8s;
 }
 
 .zoca-loader__content {
@@ -399,47 +380,88 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 2.25rem;
   padding: 2rem;
   transition:
-    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.7s ease;
-  animation: zoca-loader-enter 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.65s ease;
+  animation: zoca-loader-enter 1s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.zoca-loader__logo-wrap {
+.zoca-loader__mark {
   position: relative;
+  display: grid;
+  place-items: center;
+  width: min(20rem, 72vw);
+  aspect-ratio: 1;
+}
+
+.zoca-loader__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.zoca-loader__ring-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1.5;
+}
+
+.zoca-loader__ring-fill {
+  fill: none;
+  stroke: url(#zoca-loader-gold-gradient);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 0 8px rgba(201, 169, 110, 0.55));
+}
+
+.zoca-loader__logo-shell {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(22rem, 78vw);
+  width: 72%;
+  aspect-ratio: 1;
+  isolation: isolate;
+  animation: zoca-loader-breathe 4s ease-in-out infinite;
 }
 
-.zoca-loader__logo-glow {
+.zoca-loader__logo-shell::before {
+  content: "";
   position: absolute;
-  inset: -20%;
+  inset: -8%;
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(201, 169, 110, 0.35) 0%,
-    rgba(15, 35, 66, 0.15) 50%,
+    rgba(201, 169, 110, 0.28) 0%,
+    rgba(201, 169, 110, 0.08) 42%,
     transparent 72%
   );
-  animation: zoca-loader-pulse 3.6s ease-in-out infinite;
   pointer-events: none;
 }
 
-.zoca-loader__logo {
+.zoca-loader__logo-img {
   position: relative;
   z-index: 1;
   display: block;
   width: 100%;
+  height: auto;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 28px rgba(201, 169, 110, 0.5))
+    drop-shadow(0 12px 40px rgba(0, 0, 0, 0.35));
 }
 
-.zoca-loader__logo .brand-logo-img {
-  width: 100% !important;
-  height: auto !important;
-  filter: drop-shadow(0 0 32px rgba(201, 169, 110, 0.55));
+.zoca-loader__status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  animation: zoca-loader-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
 }
 
 .zoca-loader__mantra {
@@ -448,105 +470,37 @@ body {
   font-weight: 500;
   letter-spacing: 0.38em;
   text-transform: uppercase;
-  color: rgba(232, 212, 176, 0.55);
-  animation: zoca-loader-fade-up 1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
-}
-
-.zoca-loader__footer {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 2;
-  padding: 0 0 1.75rem;
-}
-
-.zoca-loader__track {
-  position: relative;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.zoca-loader__track-fill {
-  height: 100%;
-  transform-origin: left center;
-  background: linear-gradient(
-    90deg,
-    var(--loader-gold-dark),
-    var(--loader-gold),
-    var(--loader-gold-light)
-  );
-  box-shadow: 0 0 24px rgba(201, 169, 110, 0.45);
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform;
-}
-
-.zoca-loader__track-glow {
-  position: absolute;
-  top: 50%;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(232, 212, 176, 0.55) 0%, transparent 70%);
-  transform: translate(-50%, -50%);
-  transition: left 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-}
-
-.zoca-loader__meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.85rem 1.75rem 0;
-}
-
-.zoca-loader__label {
-  font-size: 0.62rem;
-  font-weight: 500;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(248, 250, 252, 0.35);
+  color: rgba(232, 212, 176, 0.62);
 }
 
 .zoca-loader__pct {
+  margin: 0;
   font-family: var(--font-geist-mono), monospace;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.22em;
   color: var(--loader-gold-light);
 }
 
 @keyframes zoca-loader-enter {
   from {
     opacity: 0;
-    transform: scale(1.06) translateY(12px);
-    filter: blur(8px);
+    transform: scale(0.96) translateY(16px);
   }
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
-    filter: blur(0);
   }
 }
 
 @keyframes zoca-loader-fade-up {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes zoca-loader-shimmer {
-  0% {
-    transform: translateX(-120%);
-  }
-  45%,
-  100% {
-    transform: translateX(120%);
   }
 }
 
@@ -556,29 +510,27 @@ body {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.015);
-  }
-}
-
-@keyframes zoca-loader-pulse {
-  0%,
-  100% {
-    opacity: 0.55;
-    transform: scale(0.96);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.04);
+    transform: scale(1.02);
   }
 }
 
 @keyframes zoca-loader-drift {
   0%,
   100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-2%) scale(1.05);
+  }
+}
+
+@keyframes zoca-loader-drift-b {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
   50% {
-    transform: translate(2%, -2%) scale(1.06);
+    transform: translate(-2%, -2%) scale(1.06);
   }
 }
 
