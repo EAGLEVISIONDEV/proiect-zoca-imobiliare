@@ -1,7 +1,8 @@
 "use client";
 
-import { SpeakerHigh, SpeakerSlash } from "@phosphor-icons/react";
+import { SpeakerHigh, SpeakerSlash } from "@phosphor-icons/react/dist/ssr";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useHydrated } from "@/lib/useHydrated";
 
 const VIDEO_ID = "M-ri_i2zIRE";
 const SCROLL_SECTION_SELECTOR = ".scroll-animation-long";
@@ -28,6 +29,7 @@ function loadYouTubeApi(): Promise<void> {
 }
 
 export function ScrollBackgroundMusic() {
+  const hydrated = useHydrated();
   const playerRef = useRef<YT.Player | null>(null);
   const startedRef = useRef(false);
   const mutedRef = useRef(false);
@@ -61,6 +63,8 @@ export function ScrollBackgroundMusic() {
   }, [syncPlayback]);
 
   useEffect(() => {
+    if (!hydrated) return;
+
     let destroyed = false;
 
     loadYouTubeApi().then(() => {
@@ -96,10 +100,10 @@ export function ScrollBackgroundMusic() {
       playerRef.current?.destroy();
       playerRef.current = null;
     };
-  }, []);
+  }, [hydrated]);
 
   useEffect(() => {
-    if (!ready) return;
+    if (!ready || !hydrated) return;
 
     const onInteract = () => {
       startMusic();
@@ -114,10 +118,10 @@ export function ScrollBackgroundMusic() {
       window.removeEventListener("touchstart", onInteract);
       window.removeEventListener("keydown", onInteract);
     };
-  }, [ready, startMusic]);
+  }, [ready, startMusic, hydrated]);
 
   useEffect(() => {
-    if (!ready) return;
+    if (!ready || !hydrated) return;
 
     const updateScrollSection = () => {
       const section = document.querySelector(SCROLL_SECTION_SELECTOR);
@@ -145,7 +149,7 @@ export function ScrollBackgroundMusic() {
     updateScrollSection();
     window.addEventListener("scroll", updateScrollSection, { passive: true });
     return () => window.removeEventListener("scroll", updateScrollSection);
-  }, [ready, syncPlayback]);
+  }, [ready, syncPlayback, hydrated]);
 
   const toggleMute = () => {
     const player = playerRef.current;
@@ -170,6 +174,10 @@ export function ScrollBackgroundMusic() {
       player.mute();
     }
   };
+
+  if (!hydrated) {
+    return null;
+  }
 
   return (
     <>

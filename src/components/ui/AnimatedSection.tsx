@@ -29,7 +29,7 @@ export function AnimatedSection({
   return (
     <motion.div
       className={className}
-      initial="hidden"
+      initial={false}
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
       variants={containerVariants}

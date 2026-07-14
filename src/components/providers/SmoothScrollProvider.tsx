@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactLenis } from "lenis/react";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 const options = {
   lerp: 0.08,
@@ -14,6 +14,16 @@ const options = {
 };
 
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    setEnabled(true);
+  }, []);
+
+  if (!enabled) {
+    return children;
+  }
+
   return (
     <ReactLenis root options={options}>
       {children}

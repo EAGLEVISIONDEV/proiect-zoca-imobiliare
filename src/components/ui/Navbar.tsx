@@ -1,6 +1,6 @@
 "use client";
 
-import { List, Phone, X } from "@phosphor-icons/react";
+import { List, Phone, X } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BrandLogo } from "@/components/ui/BrandLogo";

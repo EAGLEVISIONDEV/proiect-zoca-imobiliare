@@ -1,7 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { Plus } from "@phosphor-icons/react";
+import { Plus } from "@phosphor-icons/react/dist/ssr";
 import { useState } from "react";
 import {
   AnimatedItem,
@@ -11,7 +10,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { faqs } from "@/lib/content";
 
 export function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
     <section id="faq" className="section-premium bg-white">
@@ -34,6 +33,7 @@ export function FAQ() {
                     type="button"
                     className="flex w-full items-center justify-between gap-6 py-6 text-left"
                     onClick={() => setOpenIndex(isOpen ? null : index)}
+                    aria-expanded={isOpen}
                   >
                     <span className="text-base font-medium tracking-tight text-stone-950 md:text-lg">
                       {faq.question}
@@ -45,20 +45,17 @@ export function FAQ() {
                       }`}
                     />
                   </button>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                      >
-                        <p className="pb-6 text-sm leading-relaxed text-stone-500 md:text-base">
-                          {faq.answer}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div
+                    className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                      isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="pb-6 text-sm leading-relaxed text-stone-500 md:text-base">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               );
             })}

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, Bed, Ruler, Shower } from "@phosphor-icons/react";
+import { ArrowUpRight, Bed, Ruler, Shower } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
 import {

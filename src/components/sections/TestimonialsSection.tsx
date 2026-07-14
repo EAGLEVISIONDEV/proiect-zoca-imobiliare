@@ -1,6 +1,6 @@
 "use client";
 
-import { Quotes } from "@phosphor-icons/react";
+import { Quotes } from "@phosphor-icons/react/dist/ssr";
 import {
   AnimatedItem,
   AnimatedSection,
