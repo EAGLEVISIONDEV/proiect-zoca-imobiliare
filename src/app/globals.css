@@ -306,23 +306,14 @@ body {
 
 /* ── Zoca luxury loader ── */
 .zoca-loader {
-  --loader-navy: #050d1a;
   --loader-gold: #c9a96e;
   --loader-gold-light: #e8d4b0;
 
   position: fixed;
   inset: 0;
   z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
-  background: radial-gradient(
-    ellipse 120% 80% at 50% 40%,
-    #0c1f3d 0%,
-    var(--loader-navy) 55%,
-    #030810 100%
-  );
+  background: #000;
   color: #f8fafc;
   opacity: 1;
   transition:
@@ -336,132 +327,97 @@ body {
   pointer-events: none;
 }
 
-.zoca-loader--exit .zoca-loader__content {
-  transform: scale(1.04);
+.zoca-loader--exit .zoca-loader__center {
+  transform: translate(-50%, -50%) scale(1.04);
   opacity: 0;
 }
 
-.zoca-loader__ambient {
+.zoca-loader__backdrop {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
-.zoca-loader__orb {
+.zoca-loader__glow {
   position: absolute;
   border-radius: 50%;
   filter: blur(90px);
-  opacity: 0.5;
-  animation: zoca-loader-drift 16s ease-in-out infinite;
+  opacity: 0.55;
 }
 
-.zoca-loader__orb--a {
-  top: 10%;
+.zoca-loader__glow--gold {
+  top: 50%;
   left: 50%;
-  width: min(52vw, 32rem);
-  height: min(52vw, 32rem);
-  transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(201, 169, 110, 0.22) 0%, transparent 68%);
+  width: min(70vw, 36rem);
+  height: min(70vw, 36rem);
+  transform: translate(-50%, -54%);
+  background: radial-gradient(
+    circle,
+    rgba(201, 169, 110, 0.18) 0%,
+    rgba(201, 169, 110, 0.04) 42%,
+    transparent 72%
+  );
+  animation: zoca-loader-glow 5s ease-in-out infinite;
 }
 
-.zoca-loader__orb--b {
-  right: -8%;
-  bottom: -6%;
-  width: min(44vw, 26rem);
-  height: min(44vw, 26rem);
-  background: radial-gradient(circle, rgba(30, 74, 138, 0.45) 0%, transparent 70%);
-  animation: zoca-loader-drift-b 16s ease-in-out infinite;
-  animation-delay: -8s;
+.zoca-loader__glow--navy {
+  right: -12%;
+  bottom: -18%;
+  width: min(55vw, 28rem);
+  height: min(55vw, 28rem);
+  background: radial-gradient(circle, rgba(22, 52, 96, 0.35) 0%, transparent 70%);
+  animation: zoca-loader-glow 7s ease-in-out infinite reverse;
 }
 
-.zoca-loader__content {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2.25rem;
-  padding: 2rem;
-  transition:
-    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.65s ease;
-  animation: zoca-loader-enter 1s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.zoca-loader__mark {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: min(20rem, 72vw);
-  aspect-ratio: 1;
-}
-
-.zoca-loader__ring {
+.zoca-loader__center {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-
-.zoca-loader__ring-track {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.08);
-  stroke-width: 1.5;
-}
-
-.zoca-loader__ring-fill {
-  fill: none;
-  stroke: url(#zoca-loader-gold-gradient);
-  stroke-width: 2;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  filter: drop-shadow(0 0 8px rgba(201, 169, 110, 0.55));
-}
-
-.zoca-loader__logo-shell {
-  position: relative;
+  top: 50%;
+  left: 50%;
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 72%;
-  aspect-ratio: 1;
-  isolation: isolate;
-  animation: zoca-loader-breathe 4s ease-in-out infinite;
+  width: min(17.5rem, 68vw);
+  transform: translate(-50%, -50%);
+  transition:
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.65s ease;
+  animation: zoca-loader-enter 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.zoca-loader__logo-shell::before {
-  content: "";
+.zoca-loader__halo {
   position: absolute;
-  inset: -8%;
+  inset: -14%;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(201, 169, 110, 0.28) 0%,
-    rgba(201, 169, 110, 0.08) 42%,
-    transparent 72%
-  );
+  border: 1px solid rgba(201, 169, 110, 0.12);
+  box-shadow:
+    0 0 60px rgba(201, 169, 110, 0.08),
+    inset 0 0 40px rgba(201, 169, 110, 0.04);
+  animation: zoca-loader-breathe 4.5s ease-in-out infinite;
   pointer-events: none;
 }
 
-.zoca-loader__logo-img {
+.zoca-loader__logo {
   position: relative;
   z-index: 1;
   display: block;
   width: 100%;
   height: auto;
-  mix-blend-mode: screen;
-  filter: drop-shadow(0 0 28px rgba(201, 169, 110, 0.5))
-    drop-shadow(0 12px 40px rgba(0, 0, 0, 0.35));
+  object-fit: contain;
 }
 
-.zoca-loader__status {
+.zoca-loader__footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.65rem;
-  animation: zoca-loader-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+  gap: 1rem;
+  padding: 0 1.75rem 2rem;
+  animation: zoca-loader-fade-up 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
 }
 
 .zoca-loader__mantra {
@@ -470,33 +426,66 @@ body {
   font-weight: 500;
   letter-spacing: 0.38em;
   text-transform: uppercase;
-  color: rgba(232, 212, 176, 0.62);
+  color: rgba(232, 212, 176, 0.5);
+}
+
+.zoca-loader__track {
+  width: min(20rem, 72vw);
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.zoca-loader__track-fill {
+  height: 100%;
+  transform-origin: left center;
+  background: linear-gradient(
+    90deg,
+    rgba(139, 115, 85, 0.85),
+    var(--loader-gold),
+    var(--loader-gold-light)
+  );
+  box-shadow: 0 0 18px rgba(201, 169, 110, 0.45);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.zoca-loader__meta {
+  display: flex;
+  width: min(20rem, 72vw);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.zoca-loader__label {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(248, 250, 252, 0.34);
 }
 
 .zoca-loader__pct {
-  margin: 0;
   font-family: var(--font-geist-mono), monospace;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 500;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.16em;
   color: var(--loader-gold-light);
 }
 
 @keyframes zoca-loader-enter {
   from {
     opacity: 0;
-    transform: scale(0.96) translateY(16px);
+    transform: translate(-50%, -46%) scale(0.94);
   }
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
 @keyframes zoca-loader-fade-up {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -508,29 +497,23 @@ body {
   0%,
   100% {
     transform: scale(1);
+    opacity: 0.75;
   }
   50% {
-    transform: scale(1.02);
+    transform: scale(1.03);
+    opacity: 1;
   }
 }
 
-@keyframes zoca-loader-drift {
+@keyframes zoca-loader-glow {
   0%,
   100% {
-    transform: translateX(-50%) translateY(0) scale(1);
+    opacity: 0.45;
+    transform: translate(-50%, -54%) scale(1);
   }
   50% {
-    transform: translateX(-50%) translateY(-2%) scale(1.05);
-  }
-}
-
-@keyframes zoca-loader-drift-b {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(-2%, -2%) scale(1.06);
+    opacity: 0.7;
+    transform: translate(-50%, -54%) scale(1.06);
   }
 }
 

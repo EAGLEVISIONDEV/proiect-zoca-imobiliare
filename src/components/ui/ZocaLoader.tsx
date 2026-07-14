@@ -9,14 +9,10 @@ type ZocaLoaderProps = {
   visible: boolean;
 };
 
-const RING_RADIUS = 54;
-const RING_CIRC = 2 * Math.PI * RING_RADIUS;
-
 export function ZocaLoader({ progress, visible }: ZocaLoaderProps) {
   const [mounted, setMounted] = useState(true);
   const [exiting, setExiting] = useState(false);
   const pct = Math.min(100, Math.max(0, Math.round(progress * 100)));
-  const ringOffset = RING_CIRC * (1 - progress);
 
   useEffect(() => {
     if (!visible && mounted) {
@@ -35,65 +31,37 @@ export function ZocaLoader({ progress, visible }: ZocaLoaderProps) {
       aria-live="polite"
       aria-label={`Se încarcă experiența, ${pct} procent`}
     >
-      <div className="zoca-loader__ambient" aria-hidden="true">
-        <div className="zoca-loader__orb zoca-loader__orb--a" />
-        <div className="zoca-loader__orb zoca-loader__orb--b" />
+      <div className="zoca-loader__backdrop" aria-hidden="true">
+        <div className="zoca-loader__glow zoca-loader__glow--gold" />
+        <div className="zoca-loader__glow zoca-loader__glow--navy" />
       </div>
 
-      <div className="zoca-loader__content">
-        <div className="zoca-loader__mark">
-          <svg
-            className="zoca-loader__ring"
-            viewBox="0 0 120 120"
-            aria-hidden="true"
-          >
-            <defs>
-              <linearGradient
-                id="zoca-loader-gold-gradient"
-                x1="0%"
-                y1="0%"
-                x2="100%"
-                y2="100%"
-              >
-                <stop offset="0%" stopColor="#8b7355" />
-                <stop offset="50%" stopColor="#c9a96e" />
-                <stop offset="100%" stopColor="#e8d4b0" />
-              </linearGradient>
-            </defs>
-            <circle
-              className="zoca-loader__ring-track"
-              cx="60"
-              cy="60"
-              r={RING_RADIUS}
-            />
-            <circle
-              className="zoca-loader__ring-fill"
-              cx="60"
-              cy="60"
-              r={RING_RADIUS}
-              strokeDasharray={RING_CIRC}
-              strokeDashoffset={ringOffset}
-            />
-          </svg>
+      <div className="zoca-loader__center">
+        <div className="zoca-loader__halo" aria-hidden="true" />
+        <Image
+          src={siteConfig.logo}
+          alt={siteConfig.name}
+          width={1024}
+          height={1024}
+          priority
+          unoptimized
+          className="zoca-loader__logo"
+        />
+      </div>
 
-          <div className="zoca-loader__logo-shell">
-            <Image
-              src={siteConfig.logo}
-              alt={siteConfig.name}
-              width={1024}
-              height={1024}
-              priority
-              unoptimized
-              className="zoca-loader__logo-img"
-            />
-          </div>
+      <div className="zoca-loader__footer">
+        <p className="zoca-loader__mantra">
+          Exclusivitate · Excelență · Încredere
+        </p>
+        <div className="zoca-loader__track">
+          <div
+            className="zoca-loader__track-fill"
+            style={{ transform: `scaleX(${progress})` }}
+          />
         </div>
-
-        <div className="zoca-loader__status">
-          <p className="zoca-loader__mantra">
-            Exclusivitate · Excelență · Încredere
-          </p>
-          <p className="zoca-loader__pct">{String(pct).padStart(3, "0")}%</p>
+        <div className="zoca-loader__meta">
+          <span className="zoca-loader__label">Se încarcă</span>
+          <span className="zoca-loader__pct">{String(pct).padStart(3, "0")}%</span>
         </div>
       </div>
     </div>
