@@ -25,10 +25,12 @@ export function Navbar() {
       const darkSection = document.getElementById("proprietati");
       if (darkSection) {
         const rect = darkSection.getBoundingClientRect();
-        const scrollable = darkSection.offsetHeight - window.innerHeight;
+        const viewportH =
+          window.visualViewport?.height || window.innerHeight;
+        const scrollable = darkSection.offsetHeight - viewportH;
         const sectionProgress = Math.min(
           1,
-          Math.max(0, -rect.top / scrollable),
+          Math.max(0, -rect.top / Math.max(1, scrollable)),
         );
         setDark(sectionProgress >= 0.14 && rect.bottom > 80);
       }
@@ -39,6 +41,25 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
+  const logoOnLight = menuOpen || (scrolled && !dark);
+
   return (
     <header
       className={`fixed top-0 right-0 left-0 z-40 transition-all duration-500 ${
@@ -48,10 +69,15 @@ export function Navbar() {
             : "border-b border-white/30 bg-white/40 backdrop-blur-2xl backdrop-saturate-150"
           : "bg-transparent"
       }`}
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
-      <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 md:px-8">
+      <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-3 md:px-8 md:py-4">
         <Link href="/" className="group flex items-center">
-          <BrandLogo size="sm" priority />
+          <BrandLogo
+            size="sm"
+            priority
+            className={logoOnLight ? "brand-logo--on-light" : undefined}
+          />
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
@@ -81,18 +107,19 @@ export function Navbar() {
 
         <button
           type="button"
-          className={`md:hidden ${dark ? "text-white" : "text-stone-950"}`}
+          className={`md:hidden ${dark && !menuOpen ? "text-white" : "text-stone-950"}`}
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
+          aria-expanded={menuOpen}
         >
           {menuOpen ? <X size={24} /> : <List size={24} />}
         </button>
       </nav>
 
       {menuOpen && (
-        <div className="border-t border-stone-200 bg-white/95 px-6 py-6 backdrop-blur-xl md:hidden">
+        <div className="border-t border-stone-200 bg-white px-5 py-6 md:hidden">
           <div className="mb-6">
-            <BrandLogo size="sm" />
+            <BrandLogo size="sm" className="brand-logo--on-light" />
           </div>
           <div className="flex flex-col gap-4">
             {navLinks.map((link) => (

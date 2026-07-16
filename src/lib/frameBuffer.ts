@@ -154,6 +154,7 @@ export class FrameBuffer {
 export function getCanvasDpr(): number {
   if (typeof window === "undefined") return 1;
   const raw = window.devicePixelRatio || 1;
-  const isMobile = window.innerWidth < 768;
-  return Math.min(raw, isMobile ? 1.5 : 2);
+  const coarse =
+    window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768;
+  return Math.min(raw, coarse ? 1.25 : 2);
 }

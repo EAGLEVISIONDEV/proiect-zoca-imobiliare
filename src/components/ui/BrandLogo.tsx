@@ -32,7 +32,7 @@ export function BrandLogo({
         priority={priority}
         unoptimized
         className="brand-logo-img"
-        style={{ height, width: "auto", maxWidth: "none" }}
+        style={{ height, width: "auto", maxWidth: "min(100%, 11rem)" }}
       />
     </span>
   );

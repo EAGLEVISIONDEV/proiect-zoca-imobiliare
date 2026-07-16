@@ -19,7 +19,7 @@ const heroAnnotations = [
     side: "left" as const,
     title: "Contracte Exclusive",
     description: "Exclusivitate totală",
-    position: "left-[5%] top-[26%] md:left-[7%] md:top-[30%]",
+    position: "left-[3%] top-[22%] max-md:scale-90 md:left-[7%] md:top-[30%]",
   },
   {
     id: "certified",
@@ -28,7 +28,7 @@ const heroAnnotations = [
     side: "right" as const,
     title: "Agenție Certificată",
     description: "Excelență premium",
-    position: "right-[5%] top-[36%] md:right-[8%] md:top-[38%]",
+    position: "right-[3%] top-[34%] max-md:scale-90 md:right-[8%] md:top-[38%]",
   },
   {
     id: "location",
@@ -37,7 +37,8 @@ const heroAnnotations = [
     side: "left" as const,
     title: "București Premium",
     description: "Zone prestigioase",
-    position: "left-[5%] bottom-[20%] md:left-[10%] md:bottom-[22%]",
+    position:
+      "left-[3%] bottom-[18%] max-md:scale-90 md:left-[10%] md:bottom-[22%]",
   },
 ];
 
@@ -96,20 +97,20 @@ export function UnifiedScrollExperience() {
 
               <div
                 ref={heroTextRef}
-                className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center transition-opacity duration-300"
+                className="absolute inset-0 flex flex-col items-center justify-center px-5 pt-16 pb-24 text-center transition-opacity duration-300 sm:px-6 md:pt-0 md:pb-0"
               >
-                <p className="mb-4 text-[10px] font-medium tracking-[0.25em] text-white/70 uppercase">
+                <p className="mb-3 text-[9px] font-medium tracking-[0.22em] text-white/70 uppercase md:mb-4 md:text-[10px] md:tracking-[0.25em]">
                   {siteConfig.tagline}
                 </p>
-                <h1 className="max-w-[16ch] text-4xl font-semibold tracking-tighter text-white md:text-6xl lg:text-7xl lg:leading-[1.05]">
+                <h1 className="max-w-[16ch] text-[2rem] font-semibold leading-[1.1] tracking-tighter text-white sm:text-4xl md:text-6xl lg:text-7xl lg:leading-[1.05]">
                   Excelență în{" "}
                   <span className="gradient-text">Imobiliare</span>
                 </h1>
-                <p className="mt-6 max-w-[48ch] text-base leading-relaxed text-white/75 md:text-lg">
+                <p className="mt-4 max-w-[40ch] text-sm leading-relaxed text-white/75 sm:mt-6 sm:max-w-[48ch] sm:text-base md:text-lg">
                   Descoperiți proprietăți exclusive, selectate cu grijă pentru
                   clienții care nu fac compromisuri.
                 </p>
-                <div className="pointer-events-auto mt-8 flex flex-wrap items-center justify-center gap-4">
+                <div className="pointer-events-auto mt-6 flex flex-col items-center justify-center gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-4">
                   <Button href="#despre" showArrow>
                     Descoperă Proprietăți
                   </Button>
@@ -144,11 +145,11 @@ export function UnifiedScrollExperience() {
 
               {properties.map((property, i) => {
                 const positions = [
-                  "left-[4%] top-[28%] md:left-[7%] md:top-[30%]",
-                  "right-[4%] top-[26%] md:right-[7%] md:top-[28%]",
-                  "left-[4%] top-[40%] md:left-[11%] md:top-[42%]",
-                  "right-[4%] top-[42%] md:right-[9%] md:top-[44%]",
-                  "left-1/2 top-[48%] -translate-x-1/2 md:top-[50%]",
+                  "left-[3%] top-[24%] max-md:scale-90 md:left-[7%] md:top-[30%]",
+                  "right-[3%] top-[24%] max-md:scale-90 md:right-[7%] md:top-[28%]",
+                  "left-[3%] top-[38%] max-md:scale-90 md:left-[11%] md:top-[42%]",
+                  "right-[3%] top-[40%] max-md:scale-90 md:right-[9%] md:top-[44%]",
+                  "left-1/2 top-[46%] -translate-x-1/2 max-md:scale-90 md:top-[50%]",
                 ];
                 const sides = ["left", "right", "left", "right", "center"] as const;
                 return (
@@ -166,12 +167,12 @@ export function UnifiedScrollExperience() {
 
               <div
                 ref={ctaRef}
-                className="absolute inset-x-0 bottom-16 flex flex-col items-center px-6 text-center opacity-0 transition-opacity duration-700"
+                className="absolute inset-x-0 bottom-[max(4.5rem,calc(env(safe-area-inset-bottom)+3.5rem))] flex flex-col items-center px-5 text-center opacity-0 transition-opacity duration-700 sm:px-6 md:bottom-16"
               >
-                <h3 className="max-w-[22ch] text-2xl font-semibold tracking-tighter text-white md:text-4xl">
+                <h3 className="max-w-[22ch] text-xl font-semibold tracking-tighter text-white sm:text-2xl md:text-4xl">
                   Gata să descoperiți următoarea proprietate?
                 </h3>
-                <div className="mt-6">
+                <div className="mt-5 md:mt-6">
                   <Button href="#contact" variant="primary" showArrow>
                     Contactează-ne
                   </Button>
@@ -180,7 +181,7 @@ export function UnifiedScrollExperience() {
 
               <div
                 ref={scrollHintRef}
-                className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-white/60"
+                className="absolute bottom-[max(1.5rem,calc(env(safe-area-inset-bottom)+0.75rem))] left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-white/60 sm:flex md:bottom-8"
               >
                 <span className="text-[10px] tracking-widest uppercase">
                   Scroll

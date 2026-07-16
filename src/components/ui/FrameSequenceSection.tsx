@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { FrameBuffer, getCanvasDpr, type FrameBitmap } from "@/lib/frameBuffer";
+import { getFrameBufferProfile } from "@/lib/device";
 import { ZocaLoader } from "@/components/ui/ZocaLoader";
 
 type Annotation = {
@@ -50,8 +51,12 @@ type DrawMetrics = {
   upscaling: boolean;
 };
 
-const MIN_FRAMES_TO_START = 48;
 const PROGRESS_THROTTLE = 0.004;
+
+function isSafariLike() {
+  if (typeof navigator === "undefined") return false;
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+}
 
 export function FrameSequenceSection({
   frameCount,
@@ -66,6 +71,7 @@ export function FrameSequenceSection({
   render,
 }: FrameSequenceOptions) {
   const sectionRef = useRef<HTMLElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -167,18 +173,33 @@ export function FrameSequenceSection({
 
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const stage = stageRef.current;
+    if (!canvas || !stage) return;
 
+    const rect = stage.getBoundingClientRect();
+    const width = Math.max(1, Math.round(rect.width || window.innerWidth));
+    const height = Math.max(
+      1,
+      Math.round(
+        rect.height ||
+          window.visualViewport?.height ||
+          window.innerHeight,
+      ),
+    );
     const dpr = getCanvasDpr();
-    canvas.width = Math.floor(window.innerWidth * dpr);
-    canvas.height = Math.floor(window.innerHeight * dpr);
-    canvas.style.width = `${window.innerWidth}px`;
-    canvas.style.height = `${window.innerHeight}px`;
 
-    ctxRef.current = canvas.getContext("2d", {
-      alpha: false,
-      desynchronized: true,
-    } as CanvasRenderingContext2DSettings);
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+
+    const options: CanvasRenderingContext2DSettings = { alpha: false };
+    if (!isSafariLike()) {
+      (options as CanvasRenderingContext2DSettings & { desynchronized?: boolean })
+        .desynchronized = true;
+    }
+
+    ctxRef.current = canvas.getContext("2d", options);
 
     metricsRef.current = null;
     lastFrameRef.current = -1;
@@ -269,7 +290,9 @@ export function FrameSequenceSection({
     if (!section) return 0;
 
     const rect = section.getBoundingClientRect();
-    const scrollableHeight = section.offsetHeight - window.innerHeight;
+    const viewportH =
+      window.visualViewport?.height || window.innerHeight;
+    const scrollableHeight = section.offsetHeight - viewportH;
     if (scrollableHeight <= 0) return 0;
 
     return Math.min(1, Math.max(0, -rect.top / scrollableHeight));
@@ -285,10 +308,11 @@ export function FrameSequenceSection({
   }, [loaded, updateFromProgress, getProgress]);
 
   useEffect(() => {
+    const profile = getFrameBufferProfile();
     const buffer = new FrameBuffer(frameCount, framePath, {
-      bufferRadius: 60,
-      maxCache: 150,
-      maxConcurrent: 10,
+      bufferRadius: profile.bufferRadius,
+      maxCache: profile.maxCache,
+      maxConcurrent: profile.maxConcurrent,
     });
     bufferRef.current = buffer;
 
@@ -307,14 +331,18 @@ export function FrameSequenceSection({
     };
 
     void (async () => {
-      await buffer.preloadInitial(MIN_FRAMES_TO_START, reportProgress);
+      await buffer.preloadInitial(profile.minFramesToStart, reportProgress);
       if (!cancelled) {
         setLoadProgress(1);
         setLoaded(true);
+        resizeCanvas();
         updateFromProgress(getProgress());
       }
 
-      void buffer.preloadInitial(Math.min(280, frameCount), undefined);
+      void buffer.preloadInitial(
+        Math.min(profile.warmPreload, frameCount),
+        undefined,
+      );
     })();
 
     return () => {
@@ -323,13 +351,28 @@ export function FrameSequenceSection({
       buffer.destroy();
       bufferRef.current = null;
     };
-  }, [frameCount, framePath, getProgress, updateFromProgress]);
+  }, [frameCount, framePath, getProgress, updateFromProgress, resizeCanvas]);
 
   useEffect(() => {
     resizeCanvas();
-    window.addEventListener("resize", resizeCanvas, { passive: true });
-    return () => window.removeEventListener("resize", resizeCanvas);
-  }, [resizeCanvas]);
+
+    const onResize = () => {
+      resizeCanvas();
+      if (loaded) scheduleFrame();
+    };
+
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("orientationchange", onResize, { passive: true });
+    window.visualViewport?.addEventListener("resize", onResize);
+    window.visualViewport?.addEventListener("scroll", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+      window.visualViewport?.removeEventListener("resize", onResize);
+      window.visualViewport?.removeEventListener("scroll", onResize);
+    };
+  }, [resizeCanvas, loaded, scheduleFrame]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -349,6 +392,19 @@ export function FrameSequenceSection({
   }, [loaded, scheduleFrame]);
 
   useLenis(scheduleFrame, [scheduleFrame], 0);
+
+  useEffect(() => {
+    if (!loaded) return;
+
+    const onScroll = () => scheduleFrame();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("scroll", onScroll);
+    };
+  }, [loaded, scheduleFrame]);
 
   useEffect(() => {
     if (!loaded) return;
@@ -374,7 +430,8 @@ export function FrameSequenceSection({
       ) : null}
 
       <div
-        className="sticky top-0 h-screen overflow-hidden"
+        ref={stageRef}
+        className="sticky top-0 h-dvh overflow-hidden"
         style={{
           willChange: "transform",
           transform: "translateZ(0)",
