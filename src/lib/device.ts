@@ -11,10 +11,10 @@ export function getFrameBufferProfile() {
   const mobile = isMobileViewport();
   return {
     mobile,
-    minFramesToStart: mobile ? 12 : 48,
-    warmPreload: mobile ? 48 : 280,
-    bufferRadius: mobile ? 14 : 60,
-    maxCache: mobile ? 32 : 150,
-    maxConcurrent: mobile ? 3 : 10,
+    minFramesToStart: mobile ? 6 : 48,
+    warmPreload: mobile ? 24 : 280,
+    bufferRadius: mobile ? 10 : 60,
+    maxCache: mobile ? 24 : 150,
+    maxConcurrent: mobile ? 2 : 10,
   };
 }

@@ -67,6 +67,18 @@ body {
   height: 400vh;
 }
 
+.frame-sequence-stage {
+  height: 100vh;
+  height: 100dvh;
+}
+
+@media (min-width: 768px) {
+  .frame-sequence-stage {
+    perspective: 1200px;
+    perspective-origin: 50% 45%;
+  }
+}
+
 @media (max-width: 1024px) {
   .scroll-animation-long {
     height: 2600vh !important;

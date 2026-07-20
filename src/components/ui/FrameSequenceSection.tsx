@@ -393,6 +393,39 @@ export function FrameSequenceSection({
 
   useLenis(scheduleFrame, [scheduleFrame], 0);
 
+  // iOS momentum scroll fires sparse scroll events — scrub for a short window after input.
+  useEffect(() => {
+    if (!loaded) return;
+
+    let raf = 0;
+    let until = 0;
+
+    const tick = () => {
+      raf = 0;
+      if (!isActiveRef.current) return;
+      updateFromProgress(getProgress());
+      if (performance.now() < until) {
+        raf = requestAnimationFrame(tick);
+      }
+    };
+
+    const kick = () => {
+      until = performance.now() + 180;
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("scroll", kick, { passive: true });
+    window.addEventListener("touchmove", kick, { passive: true });
+    window.addEventListener("touchstart", kick, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", kick);
+      window.removeEventListener("touchmove", kick);
+      window.removeEventListener("touchstart", kick);
+    };
+  }, [loaded, updateFromProgress, getProgress]);
+
   useEffect(() => {
     if (!loaded) return;
 
@@ -431,18 +464,12 @@ export function FrameSequenceSection({
 
       <div
         ref={stageRef}
-        className="sticky top-0 h-dvh overflow-hidden"
-        style={{
-          willChange: "transform",
-          transform: "translateZ(0)",
-          perspective: "1200px",
-          perspectiveOrigin: "50% 45%",
-        }}
+        className="frame-sequence-stage sticky top-0 overflow-hidden"
       >
         <canvas
           ref={canvasRef}
           className="h-full w-full"
-          style={{ willChange: "contents", transform: "translateZ(0)" }}
+          style={{ willChange: "contents" }}
         />
         <div
           ref={overlayRef}

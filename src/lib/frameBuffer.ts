@@ -98,7 +98,7 @@ export class FrameBuffer {
       await Promise.all(jobs);
     };
 
-    const chunkSize = 12;
+    const chunkSize = this.maxConcurrent <= 3 ? 4 : 12;
     for (let start = 0; start < target; start += chunkSize) {
       const end = Math.min(target - 1, start + chunkSize - 1);
       await batch(start, end);

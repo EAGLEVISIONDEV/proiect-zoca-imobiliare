@@ -2,6 +2,7 @@
 
 import { ReactLenis } from "lenis/react";
 import { useEffect, useState, type ReactNode } from "react";
+import { isMobileViewport } from "@/lib/device";
 
 const options = {
   lerp: 0.08,
@@ -14,13 +15,15 @@ const options = {
 };
 
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
-  const [enabled, setEnabled] = useState(false);
+  const [mode, setMode] = useState<"pending" | "lenis" | "native">("pending");
 
   useEffect(() => {
-    setEnabled(true);
+    // Lenis root transforms break `position: sticky` on iOS/Android.
+    // Use native scroll on touch devices so the frame sequence works.
+    setMode(isMobileViewport() ? "native" : "lenis");
   }, []);
 
-  if (!enabled) {
+  if (mode !== "lenis") {
     return children;
   }
 
